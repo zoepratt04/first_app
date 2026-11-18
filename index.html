@@ -21,7 +21,7 @@
       --amber-soft: #fff5df;
       --red: #c44747;
       --shadow: 0 10px 28px rgba(25, 45, 75, .055);
-      font-family: Inter, system-ui, sans-serif;
+      font-family: Papyrus, fantasy;
     }
 
     * { box-sizing: border-box; }
@@ -38,11 +38,22 @@
     button, input, select { color: inherit; }
 
     .page {
+      position: relative;
+      z-index: 1;
       width: min(1440px, 100%);
       margin: 0 auto;
       padding: 28px 34px 40px;
     }
 
+    .scenery-background {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .13;
+      pointer-events: none;
+    }
 
     .topbar {
       display: flex;
@@ -284,9 +295,9 @@
     .plot-wrap { padding: 0 14px 12px; }
     .gridline { stroke: #e9eef4; stroke-width: 1; }
     .axis { stroke: #aab6c5; stroke-width: 1; }
-    .plot-label { fill: #596b80; font: 11px Inter, system-ui, sans-serif; }
-    .plot-small { fill: #8794a4; font: 9px Inter, system-ui, sans-serif; }
-    .plot-value { fill: #2e425d; font: 700 10px Inter, system-ui, sans-serif; }
+    .plot-label { fill: #596b80; font: 11px Papyrus, fantasy; }
+    .plot-small { fill: #8794a4; font: 9px Papyrus, fantasy; }
+    .plot-value { fill: #2e425d; font: 700 10px Papyrus, fantasy; }
     .crosshair { stroke: #526e90; stroke-width: 1; stroke-dasharray: 4 4; opacity: .7; }
     .shear-fill { fill: #dceaff; }
     .shear-line { fill: none; stroke: #3b78c5; stroke-width: 2.4; }
@@ -401,6 +412,34 @@
   </style>
 </head>
 <body>
+  <svg class="scenery-background" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="forest-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#9fc9df"></stop>
+        <stop offset=".62" stop-color="#e0e9df"></stop>
+        <stop offset="1" stop-color="#c5d8c8"></stop>
+      </linearGradient>
+      <linearGradient id="forest-lake" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#9abfc0"></stop>
+        <stop offset="1" stop-color="#d0dfd6"></stop>
+      </linearGradient>
+    </defs>
+    <rect width="1600" height="1000" fill="url(#forest-sky)"></rect>
+    <circle cx="1260" cy="210" r="92" fill="#fff1c8"></circle>
+    <path d="M0 540 190 365 325 465 505 285 690 495 885 335 1080 500 1285 315 1460 470 1600 350V710H0Z" fill="#9dbbc4"></path>
+    <path d="m0 575 210-130 180 145 210-210 220 205 210-140 190 160 210-195 170 150v210H0Z" fill="#b5c9bb"></path>
+    <path d="M0 610Q250 545 500 610t500 0 600 10V1000H0Z" fill="#638e79"></path>
+    <path d="M0 700Q280 620 570 700t530 0 500 0V1000H0Z" fill="url(#forest-lake)"></path>
+    <path d="M0 770q280-48 560 0t520 0 520 0" fill="none" stroke="#f4f4df" stroke-width="8" opacity=".8"></path>
+    <g fill="#426d58">
+      <path d="m45 735 70-220 70 220h-38l58 112H24l58-112z"></path>
+      <path d="m235 715 62-190 62 190h-34l52 98H217l52-98z"></path>
+      <path d="m420 730 78-244 78 244h-42l64 119H398l64-119z"></path>
+      <path d="m1110 730 72-222 72 222h-39l59 112h-184l59-112z"></path>
+      <path d="m1325 720 64-198 64 198h-35l53 101h-164l53-101z"></path>
+      <path d="m1500 740 55-170 55 170h-30l47 90h-144l47-90z"></path>
+    </g>
+  </svg>
   <main class="page">
     <header class="topbar">
       <div class="brand">
@@ -426,7 +465,7 @@
             <div class="field">
               <label for="support">Support type</label>
               <div class="select-wrap">
-                <select class="control" id="support" disabled>
+                <select class="control" id="support">
                   <option value="simple" selected>Simply supported</option>
                   <option value="cantilever">Cantilever — fixed left</option>
                 </select>
@@ -435,9 +474,9 @@
             <div class="field" style="margin-top: 15px">
               <label for="span-number">Span</label>
               <div class="range-line">
-                <input id="span-slider" type="range" min="4" max="40" step="any" value="20" aria-label="Span slider in feet" disabled>
+                <input id="span-slider" type="range" min="4" max="40" step="any" value="20" aria-label="Span slider in feet">
                 <div class="unit-input">
-                  <input class="control" id="span-number" type="number" min="4" max="40" step="any" value="20" aria-describedby="span-error" disabled>
+                  <input class="control" id="span-number" type="number" min="4" max="40" step="any" value="20" aria-describedby="span-error">
                   <span class="unit">ft</span>
                 </div>
               </div>
@@ -448,7 +487,7 @@
             <div class="field">
               <label for="material">Material</label>
               <div class="select-wrap">
-                <select class="control" id="material" disabled>
+                <select class="control" id="material">
                   <option value="steel" selected>Steel W-shapes</option>
                   <option value="lumber">Douglas Fir-Larch No. 2</option>
                 </select>
@@ -457,7 +496,7 @@
             <div class="field" style="margin-top: 12px">
               <label for="section">Section</label>
               <div class="select-wrap">
-                <select class="control" id="section" disabled>
+                <select class="control" id="section">
                   <option value="W8x10">W8x10</option>
                   <option value="W10x12">W10x12</option>
                   <option value="W12x26" selected>W12x26</option>
@@ -475,11 +514,11 @@
               <span class="field-label">Deflection limit</span>
               <div class="limit-options" role="group" aria-label="Deflection limit">
                 <label class="choice">
-                  <input type="radio" name="deflection-limit" value="240" disabled>
+                  <input type="radio" name="deflection-limit" value="240">
                   <span>L/240</span>
                 </label>
                 <label class="choice selected">
-                  <input type="radio" name="deflection-limit" value="360" checked disabled>
+                  <input type="radio" name="deflection-limit" value="360" checked>
                   <span>L/360 <span class="subtle">(default)</span></span>
                 </label>
               </div>
@@ -497,29 +536,20 @@
             <span class="live-chip"><span class="sample-dot" aria-hidden="true"></span><span id="load-count">1 active load</span></span>
           </div>
           <div class="card-body">
-            <div class="stack" id="load-list" aria-live="polite">
-              <div class="load-block">
-                <div class="load-title"><span>Uniform load</span><span class="subtle">Full span &middot; downward</span></div>
-                <div class="load-fields three">
-                  <div class="field"><label>Magnitude</label><div class="unit-input"><input class="control" type="number" value="1.00" disabled><span class="unit">k/ft</span></div></div>
-                  <div class="field"><label>Start</label><div class="unit-input"><input class="control" type="number" value="0" disabled><span class="unit">ft</span></div></div>
-                  <div class="field"><label>End</label><div class="unit-input"><input class="control" type="number" value="20" disabled><span class="unit">ft</span></div></div>
-                </div>
-              </div>
-            </div>
+            <div class="stack" id="load-list" aria-live="polite"></div>
 
             <div class="add-actions">
-              <button class="btn" id="show-point-form" type="button" aria-expanded="false" aria-controls="point-load-form" disabled>＋ Add point load</button>
-              <button class="btn" id="show-uniform-form" type="button" aria-expanded="false" aria-controls="uniform-load-form" disabled>＋ Add uniform load</button>
+              <button class="btn" id="show-point-form" type="button" aria-expanded="false" aria-controls="point-load-form">＋ Add point load</button>
+              <button class="btn" id="show-uniform-form" type="button" aria-expanded="false" aria-controls="uniform-load-form">＋ Add uniform load</button>
             </div>
 
-            <div class="load-block" id="point-load-form" style="margin-top: 11px">
-              <div class="load-title"><span>Point load &middot; draft (not added)</span></div>
+            <div class="load-block" id="point-load-form" style="margin-top: 11px" hidden>
+              <div class="load-title"><span>New point load</span></div>
               <div class="load-fields">
                 <div class="field" id="new-point-magnitude-field">
                   <label for="new-point-magnitude">Magnitude</label>
                   <div class="unit-input">
-                    <input class="control" id="new-point-magnitude" type="number" min="0" step="any" value="5" aria-describedby="new-point-magnitude-error" disabled>
+                    <input class="control" id="new-point-magnitude" type="number" min="0" step="any" value="5" aria-describedby="new-point-magnitude-error">
                     <span class="unit">kips</span>
                   </div>
                   <p class="field-error" id="new-point-magnitude-error" hidden></p>
@@ -527,7 +557,7 @@
                 <div class="field" id="new-point-position-field">
                   <label for="new-point-position">Position</label>
                   <div class="unit-input">
-                    <input class="control" id="new-point-position" type="number" step="any" value="10" aria-describedby="new-point-position-error" disabled>
+                    <input class="control" id="new-point-position" type="number" step="any" value="10" aria-describedby="new-point-position-error">
                     <span class="unit">ft</span>
                   </div>
                   <p class="field-error" id="new-point-position-error" hidden></p>
@@ -535,8 +565,8 @@
               </div>
               <p class="load-help">New point loads start at midspan, or at the free end for a cantilever.</p>
               <div class="add-actions">
-                <button class="btn primary" id="confirm-add-point" type="button" disabled>Add load</button>
-                <button class="btn" id="cancel-add-point" type="button" disabled>Cancel</button>
+                <button class="btn primary" id="confirm-add-point" type="button">Add load</button>
+                <button class="btn" id="cancel-add-point" type="button">Cancel</button>
               </div>
             </div>
 
@@ -546,7 +576,7 @@
                 <div class="field" id="new-uniform-magnitude-field">
                   <label for="new-uniform-magnitude">Magnitude</label>
                   <div class="unit-input">
-                    <input class="control" id="new-uniform-magnitude" type="number" min="0" step="any" value="1" aria-describedby="new-uniform-magnitude-error" disabled>
+                    <input class="control" id="new-uniform-magnitude" type="number" min="0" step="any" value="1" aria-describedby="new-uniform-magnitude-error">
                     <span class="unit">k/ft</span>
                   </div>
                   <p class="field-error" id="new-uniform-magnitude-error" hidden></p>
@@ -554,7 +584,7 @@
                 <div class="field" id="new-uniform-start-field">
                   <label for="new-uniform-start">Start</label>
                   <div class="unit-input">
-                    <input class="control" id="new-uniform-start" type="number" step="any" value="0" aria-describedby="new-uniform-start-error" disabled>
+                    <input class="control" id="new-uniform-start" type="number" step="any" value="0" aria-describedby="new-uniform-start-error">
                     <span class="unit">ft</span>
                   </div>
                   <p class="field-error" id="new-uniform-start-error" hidden></p>
@@ -562,7 +592,7 @@
                 <div class="field" id="new-uniform-end-field">
                   <label for="new-uniform-end">End</label>
                   <div class="unit-input">
-                    <input class="control" id="new-uniform-end" type="number" step="any" value="20" aria-describedby="new-uniform-end-error" disabled>
+                    <input class="control" id="new-uniform-end" type="number" step="any" value="20" aria-describedby="new-uniform-end-error">
                     <span class="unit">ft</span>
                   </div>
                   <p class="field-error" id="new-uniform-end-error" hidden></p>
@@ -570,12 +600,12 @@
               </div>
               <p class="load-help">Any portion outside the beam span is clipped.</p>
               <div class="add-actions">
-                <button class="btn primary" id="confirm-add-uniform" type="button" disabled>Add load</button>
-                <button class="btn" id="cancel-add-uniform" type="button" disabled>Cancel</button>
+                <button class="btn primary" id="confirm-add-uniform" type="button">Add load</button>
+                <button class="btn" id="cancel-add-uniform" type="button">Cancel</button>
               </div>
             </div>
 
-            <p class="help-note">Controls are shown for layout only; the beam drawing and results are illustrative.</p>
+            <p class="help-note">Input controls are active; the beam drawing and result values remain fixed to the example in this stage.</p>
           </div>
         </section>
       </aside>
@@ -593,11 +623,11 @@
             <strong>Example case</strong>
             <span>20 ft simply supported</span><span>·</span><span>W12x26 steel</span><span>·</span><span>1 kip/ft full-span load</span>
           </div>
-          
+          <p class="help-note" style="margin: -8px 18px 12px">Inputs are active in this stage; the drawing and result values remain fixed to this example.</p>
           <div class="beam-wrap">
             <svg class="beam-svg" viewBox="0 0 700 116" role="img" aria-labelledby="beam-title beam-desc">
               <title id="beam-title">Simply supported beam with a uniform load</title>
-              <desc id="beam-desc">A 20 foot beam with a downward uniform load of 1 kip per foot and upward reactions of 10 kips.</desc>
+              <desc id="beam-desc">A 20 foot beam with a downward uniform load of 1 kip per foot, upward reactions of 10 kips, and an exaggerated downward deflection curve.</desc>
               <defs>
                 <marker id="arrow-down" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
                   <path d="M0,0 L8,4 L0,8 z" fill="#6d83a0"></path>
@@ -620,15 +650,20 @@
               </g>
               <path d="M75 49 L61 69 L89 69 Z" fill="#dbe4ef" stroke="#8193a9"></path>
               <path d="M625 49 L611 69 L639 69 Z" fill="#dbe4ef" stroke="#8193a9"></path>
+              <path d="M75 43 C210 43 230 62 350 62 C470 62 490 43 625 43 L625 42 L75 42 Z" fill="#755cc2" opacity=".10"></path>
+              <path d="M75 43 C210 43 230 62 350 62 C470 62 490 43 625 43" fill="none" stroke="#755cc2" stroke-width="2.5" stroke-linecap="round"></path>
+              <line x1="350" y1="44" x2="350" y2="61" stroke="#755cc2" stroke-width="1" stroke-dasharray="2 2"></line>
+              <circle cx="350" cy="62" r="3" fill="#755cc2" stroke="white" stroke-width="1"></circle>
+              <text x="505" y="71" text-anchor="middle" fill="#684fb2" font-size="9" font-family="Papyrus, fantasy">Deflected shape (exaggerated)</text>
               <g stroke="#318668" stroke-width="2" marker-end="url(#arrow-up)">
                 <line x1="75" y1="95" x2="75" y2="75"></line>
                 <line x1="625" y1="95" x2="625" y2="75"></line>
               </g>
-              <text x="350" y="13" text-anchor="middle" fill="#596d87" font-size="11" font-family="Inter, system-ui, sans-serif">1.00 kip/ft</text>
-              <text x="75" y="108" text-anchor="middle" fill="#277654" font-size="11" font-weight="700" font-family="Inter, system-ui, sans-serif">10 k</text>
-              <text x="625" y="108" text-anchor="middle" fill="#277654" font-size="11" font-weight="700" font-family="Inter, system-ui, sans-serif">10 k</text>
+              <text x="350" y="13" text-anchor="middle" fill="#596d87" font-size="11" font-family="Papyrus, fantasy">1.00 kip/ft</text>
+              <text x="75" y="108" text-anchor="middle" fill="#277654" font-size="11" font-weight="700" font-family="Papyrus, fantasy">10 k</text>
+              <text x="625" y="108" text-anchor="middle" fill="#277654" font-size="11" font-weight="700" font-family="Papyrus, fantasy">10 k</text>
               <line x1="75" y1="76" x2="625" y2="76" stroke="#d8e0ea" stroke-width="1"></line>
-              <g fill="#738398" font-size="9" font-family="Inter, system-ui, sans-serif">
+              <g fill="#738398" font-size="9" font-family="Papyrus, fantasy">
                 <text x="75" y="88" text-anchor="middle">0 ft</text>
                 <text x="350" y="88" text-anchor="middle">10 ft</text>
                 <text x="625" y="88" text-anchor="middle">20 ft</text>
@@ -769,5 +804,494 @@
       </section>
     </div>
   </main>
+  <script>
+    const SECTION_CATALOG = {
+      steel: {
+        defaultSection: "W12x26",
+        elasticModulus: 29000,
+        allowableBendingStress: 30,
+        sections: [
+          { name: "W8x10", ix: 30.8, sx: 7.81, weight: 10 },
+          { name: "W10x12", ix: 53.8, sx: 10.9, weight: 12 },
+          { name: "W12x26", ix: 204, sx: 33.4, weight: 26 },
+          { name: "W14x22", ix: 199, sx: 29.0, weight: 22 },
+          { name: "W16x26", ix: 301, sx: 38.4, weight: 26 },
+          { name: "W18x35", ix: 510, sx: 57.6, weight: 35 },
+          { name: "W21x44", ix: 843, sx: 81.6, weight: 44 },
+          { name: "W24x55", ix: 1350, sx: 114, weight: 55 }
+        ]
+      },
+      lumber: {
+        defaultSection: "2x10",
+        elasticModulus: 1600,
+        allowableBendingStress: 0.9,
+        sections: [
+          { name: "2x8", ix: 47.63, sx: 13.14 },
+          { name: "2x10", ix: 98.93, sx: 21.39 },
+          { name: "2x12", ix: 177.98, sx: 31.64 }
+        ]
+      }
+    };
+
+    const designState = {
+      support: "simple",
+      span: 20,
+      material: "steel",
+      section: "W12x26",
+      deflectionLimit: 360,
+      loads: [
+        { id: 1, type: "uniform", magnitude: "1.00", start: "0", end: "20" }
+      ],
+      nextLoadId: 2
+    };
+
+    const spanSlider = document.getElementById("span-slider");
+    const spanNumber = document.getElementById("span-number");
+    const spanError = document.getElementById("span-error");
+    const supportSelect = document.getElementById("support");
+    const materialSelect = document.getElementById("material");
+    const sectionSelect = document.getElementById("section");
+    const sectionProperties = document.getElementById("section-properties");
+    const loadList = document.getElementById("load-list");
+    const loadCount = document.getElementById("load-count");
+    const previewStatus = document.getElementById("preview-status");
+    const pointLoadForm = document.getElementById("point-load-form");
+    const uniformLoadForm = document.getElementById("uniform-load-form");
+
+    // Input validation is intentionally separate from the static drawing and result markup.
+    function validateSpanInput(rawValue) {
+      if (String(rawValue).trim() === "") {
+        return { error: "Enter a span between 4 and 40 ft." };
+      }
+
+      const span = Number(rawValue);
+      if (!Number.isFinite(span)) {
+        return { error: "Enter a valid span." };
+      }
+      if (span < 4 || span > 40) {
+        return { error: "Span must be between 4 and 40 ft." };
+      }
+      return { value: span };
+    }
+
+    function validateLoadInput(load, span) {
+      const errors = {};
+      const magnitude = readFiniteNumber(load.magnitude);
+
+      if (magnitude === null) {
+        errors.magnitude = "Enter a valid magnitude.";
+      } else if (magnitude < 0) {
+        errors.magnitude = "Load magnitude must be nonnegative.";
+      }
+
+      if (load.type === "point") {
+        const position = readFiniteNumber(load.position);
+        if (position === null) {
+          errors.position = "Enter a valid position.";
+        } else if (position < 0 || position > span) {
+          errors.position = `Position must be within 0–${formatInputNumber(span)} ft.`;
+        }
+      } else {
+        const start = readFiniteNumber(load.start);
+        const end = readFiniteNumber(load.end);
+        if (start === null) {
+          errors.start = "Enter a valid start position.";
+        }
+        if (end === null) {
+          errors.end = "Enter a valid end position.";
+        }
+        if (start !== null && end !== null) {
+          if (start >= end) {
+            errors.end = "End position must be greater than start.";
+          } else if (Math.max(0, start) >= Math.min(span, end)) {
+            errors.end = "This uniform load does not overlap the beam.";
+          }
+        }
+      }
+
+      return errors;
+    }
+
+    function readFiniteNumber(rawValue) {
+      if (String(rawValue).trim() === "") {
+        return null;
+      }
+      const value = Number(rawValue);
+      return Number.isFinite(value) ? value : null;
+    }
+
+    function formatInputNumber(value) {
+      return String(value);
+    }
+
+    function setFieldError(input, errorElement, message) {
+      const field = input.closest(".field");
+      const hasError = Boolean(message);
+      input.classList.toggle("invalid", hasError);
+      input.setAttribute("aria-invalid", String(hasError));
+      field.classList.toggle("invalid", hasError);
+      errorElement.textContent = message || "";
+      errorElement.hidden = !hasError;
+    }
+
+    function markPreviewAsUnchanged() {
+      previewStatus.classList.add("stale");
+      previewStatus.replaceChildren(
+        previewStatus.querySelector(".sample-dot"),
+        document.createTextNode("Inputs changed · sample results unchanged")
+      );
+    }
+
+    function showSpanError(message) {
+      setFieldError(spanNumber, spanError, message);
+    }
+
+    function commitSpanInput(rawValue) {
+      const result = validateSpanInput(rawValue);
+      showSpanError(result.error);
+      markPreviewAsUnchanged();
+
+      if (result.error) {
+        return;
+      }
+
+      designState.span = result.value;
+      spanSlider.value = String(result.value);
+      renderLoadControls();
+      refreshOpenAddForms();
+    }
+
+    function renderSectionOptions(preferredSection) {
+      const catalog = SECTION_CATALOG[designState.material];
+      sectionSelect.replaceChildren();
+
+      catalog.sections.forEach((section) => {
+        const option = document.createElement("option");
+        option.value = section.name;
+        option.textContent = section.name;
+        sectionSelect.append(option);
+      });
+
+      const hasPreferred = catalog.sections.some((section) => section.name === preferredSection);
+      designState.section = hasPreferred ? preferredSection : catalog.defaultSection;
+      sectionSelect.value = designState.section;
+      updateSectionProperties();
+    }
+
+    function updateSectionProperties() {
+      const material = SECTION_CATALOG[designState.material];
+      const section = material.sections.find((item) => item.name === designState.section);
+      const details = [
+        `E = ${material.elasticModulus.toLocaleString("en-US")} ksi`,
+        `Ix = ${section.ix} in⁴`,
+        `Sx = ${section.sx} in³`,
+        `Fb = ${material.allowableBendingStress} ksi`
+      ];
+
+      if (section.weight !== undefined) {
+        details.push(`${section.weight} lb/ft`);
+      }
+      sectionProperties.textContent = details.join(" · ");
+    }
+
+    function createLoadField(load, property, labelText, unitText) {
+      const field = document.createElement("div");
+      field.className = "field";
+
+      const inputId = `load-${load.id}-${property}`;
+      const errorId = `${inputId}-error`;
+      const label = document.createElement("label");
+      label.htmlFor = inputId;
+      label.textContent = labelText;
+
+      const unitInput = document.createElement("div");
+      unitInput.className = "unit-input";
+
+      const input = document.createElement("input");
+      input.className = "control";
+      input.id = inputId;
+      input.type = "number";
+      input.step = "any";
+      input.value = load[property];
+      input.dataset.loadId = String(load.id);
+      input.dataset.loadProperty = property;
+      input.setAttribute("aria-describedby", errorId);
+      if (property === "magnitude") {
+        input.min = "0";
+      }
+
+      const unit = document.createElement("span");
+      unit.className = "unit";
+      unit.textContent = unitText;
+
+      const error = document.createElement("p");
+      error.className = "field-error";
+      error.id = errorId;
+      error.dataset.errorProperty = property;
+      error.setAttribute("aria-live", "polite");
+      error.hidden = true;
+
+      unitInput.append(input, unit);
+      field.append(label, unitInput, error);
+      return field;
+    }
+
+    function renderLoadControls() {
+      loadList.replaceChildren();
+
+      if (designState.loads.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "load-empty";
+        empty.textContent = "No loads added. A zero-load case is allowed.";
+        loadList.append(empty);
+      }
+
+      designState.loads.forEach((load, index) => {
+        const block = document.createElement("section");
+        block.className = "load-block";
+        block.dataset.loadId = String(load.id);
+
+        const title = document.createElement("div");
+        title.className = "load-title";
+        const titleText = document.createElement("span");
+        titleText.textContent = `${load.type === "point" ? "Point" : "Uniform"} load ${index + 1}`;
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "btn icon-button";
+        removeButton.type = "button";
+        removeButton.dataset.action = "remove-load";
+        removeButton.dataset.loadId = String(load.id);
+        removeButton.setAttribute("aria-label", `Remove ${load.type} load ${index + 1}`);
+        removeButton.textContent = "×";
+        title.append(titleText, removeButton);
+
+        const fields = document.createElement("div");
+        fields.className = load.type === "uniform" ? "load-fields three" : "load-fields";
+        if (load.type === "point") {
+          fields.append(
+            createLoadField(load, "magnitude", "Magnitude", "kips"),
+            createLoadField(load, "position", "Position", "ft")
+          );
+        } else {
+          fields.append(
+            createLoadField(load, "magnitude", "Magnitude", "k/ft"),
+            createLoadField(load, "start", "Start", "ft"),
+            createLoadField(load, "end", "End", "ft")
+          );
+        }
+
+        const note = document.createElement("p");
+        note.className = "load-help";
+        note.textContent = load.type === "point"
+          ? `Downward positive · position 0–${formatInputNumber(designState.span)} ft`
+          : "Downward positive · portions outside the beam span are clipped.";
+
+        block.append(title, fields, note);
+        loadList.append(block);
+        updateLoadErrors(block, load);
+      });
+
+      loadCount.textContent = `${designState.loads.length} active ${designState.loads.length === 1 ? "load" : "loads"}`;
+    }
+
+    function updateLoadErrors(block, load) {
+      const errors = validateLoadInput(load, designState.span);
+      block.querySelectorAll("[data-load-property]").forEach((input) => {
+        const property = input.dataset.loadProperty;
+        const errorElement = block.querySelector(`[data-error-property="${property}"]`);
+        setFieldError(input, errorElement, errors[property]);
+      });
+    }
+
+    function getPendingLoad(type) {
+      if (type === "point") {
+        return {
+          type,
+          magnitude: document.getElementById("new-point-magnitude").value,
+          position: document.getElementById("new-point-position").value
+        };
+      }
+      return {
+        type,
+        magnitude: document.getElementById("new-uniform-magnitude").value,
+        start: document.getElementById("new-uniform-start").value,
+        end: document.getElementById("new-uniform-end").value
+      };
+    }
+
+    function updatePendingLoadErrors(type) {
+      const load = getPendingLoad(type);
+      const errors = validateLoadInput(load, designState.span);
+      const fields = type === "point"
+        ? [
+            ["magnitude", "new-point-magnitude", "new-point-magnitude-error"],
+            ["position", "new-point-position", "new-point-position-error"]
+          ]
+        : [
+            ["magnitude", "new-uniform-magnitude", "new-uniform-magnitude-error"],
+            ["start", "new-uniform-start", "new-uniform-start-error"],
+            ["end", "new-uniform-end", "new-uniform-end-error"]
+          ];
+
+      fields.forEach(([property, inputId, errorId]) => {
+        setFieldError(
+          document.getElementById(inputId),
+          document.getElementById(errorId),
+          errors[property]
+        );
+      });
+
+      return { load, errors };
+    }
+
+    function clearPendingLoadErrors(type) {
+      const fields = type === "point"
+        ? [
+            ["new-point-magnitude", "new-point-magnitude-error"],
+            ["new-point-position", "new-point-position-error"]
+          ]
+        : [
+            ["new-uniform-magnitude", "new-uniform-magnitude-error"],
+            ["new-uniform-start", "new-uniform-start-error"],
+            ["new-uniform-end", "new-uniform-end-error"]
+          ];
+      fields.forEach(([inputId, errorId]) => {
+        setFieldError(document.getElementById(inputId), document.getElementById(errorId), "");
+      });
+    }
+
+    function openLoadForm(type) {
+      const isPoint = type === "point";
+      pointLoadForm.hidden = !isPoint;
+      uniformLoadForm.hidden = isPoint;
+      document.getElementById("show-point-form").setAttribute("aria-expanded", String(isPoint));
+      document.getElementById("show-uniform-form").setAttribute("aria-expanded", String(!isPoint));
+
+      if (isPoint) {
+        document.getElementById("new-point-magnitude").value = "5";
+        document.getElementById("new-point-position").value = String(
+          designState.support === "cantilever" ? designState.span : designState.span / 2
+        );
+      } else {
+        document.getElementById("new-uniform-magnitude").value = "1";
+        document.getElementById("new-uniform-start").value = "0";
+        document.getElementById("new-uniform-end").value = String(designState.span);
+      }
+
+      clearPendingLoadErrors(type);
+    }
+
+    function closeLoadForm(type) {
+      const isPoint = type === "point";
+      (isPoint ? pointLoadForm : uniformLoadForm).hidden = true;
+      document.getElementById(isPoint ? "show-point-form" : "show-uniform-form")
+        .setAttribute("aria-expanded", "false");
+    }
+
+    function addPendingLoad(type) {
+      const { load, errors } = updatePendingLoadErrors(type);
+      if (Object.keys(errors).length > 0) {
+        const firstInvalid = type === "point"
+          ? document.querySelector("#point-load-form .control.invalid")
+          : document.querySelector("#uniform-load-form .control.invalid");
+        firstInvalid?.focus();
+        return;
+      }
+
+      designState.loads.push({ id: designState.nextLoadId, ...load });
+      designState.nextLoadId += 1;
+      closeLoadForm(type);
+      renderLoadControls();
+      markPreviewAsUnchanged();
+    }
+
+    function refreshOpenAddForms() {
+      if (!pointLoadForm.hidden) {
+        updatePendingLoadErrors("point");
+      }
+      if (!uniformLoadForm.hidden) {
+        updatePendingLoadErrors("uniform");
+      }
+    }
+
+    spanSlider.addEventListener("input", () => {
+      spanNumber.value = spanSlider.value;
+      commitSpanInput(spanSlider.value);
+    });
+
+    spanNumber.addEventListener("input", () => {
+      commitSpanInput(spanNumber.value);
+    });
+
+    supportSelect.addEventListener("change", () => {
+      designState.support = supportSelect.value;
+      markPreviewAsUnchanged();
+    });
+
+    materialSelect.addEventListener("change", () => {
+      designState.material = materialSelect.value;
+      renderSectionOptions(SECTION_CATALOG[designState.material].defaultSection);
+      markPreviewAsUnchanged();
+    });
+
+    sectionSelect.addEventListener("change", () => {
+      designState.section = sectionSelect.value;
+      updateSectionProperties();
+      markPreviewAsUnchanged();
+    });
+
+    document.querySelectorAll('input[name="deflection-limit"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        designState.deflectionLimit = Number(input.value);
+        document.querySelectorAll(".choice").forEach((choice) => {
+          choice.classList.toggle("selected", choice.contains(input) && input.checked);
+        });
+        markPreviewAsUnchanged();
+      });
+    });
+
+    loadList.addEventListener("input", (event) => {
+      const input = event.target.closest("[data-load-property]");
+      if (!input) {
+        return;
+      }
+      const load = designState.loads.find((item) => String(item.id) === input.dataset.loadId);
+      if (!load) {
+        return;
+      }
+      load[input.dataset.loadProperty] = input.value;
+      updateLoadErrors(input.closest(".load-block"), load);
+      markPreviewAsUnchanged();
+    });
+
+    loadList.addEventListener("click", (event) => {
+      const button = event.target.closest('[data-action="remove-load"]');
+      if (!button) {
+        return;
+      }
+      designState.loads = designState.loads.filter((load) => String(load.id) !== button.dataset.loadId);
+      renderLoadControls();
+      markPreviewAsUnchanged();
+    });
+
+    document.getElementById("show-point-form").addEventListener("click", () => openLoadForm("point"));
+    document.getElementById("show-uniform-form").addEventListener("click", () => openLoadForm("uniform"));
+    document.getElementById("cancel-add-point").addEventListener("click", () => closeLoadForm("point"));
+    document.getElementById("cancel-add-uniform").addEventListener("click", () => closeLoadForm("uniform"));
+    document.getElementById("confirm-add-point").addEventListener("click", () => addPendingLoad("point"));
+    document.getElementById("confirm-add-uniform").addEventListener("click", () => addPendingLoad("uniform"));
+
+    pointLoadForm.addEventListener("input", () => {
+      updatePendingLoadErrors("point");
+      markPreviewAsUnchanged();
+    });
+    uniformLoadForm.addEventListener("input", () => {
+      updatePendingLoadErrors("uniform");
+      markPreviewAsUnchanged();
+    });
+
+    renderSectionOptions(designState.section);
+    renderLoadControls();
+  </script>
 </body>
 </html>
